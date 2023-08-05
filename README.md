@@ -45,5 +45,5 @@ Site Manager Login:
 
 Reviewer Login:
 
-	R44eviewer@test.com
+	reviewer@test.com
 	Test12345$
