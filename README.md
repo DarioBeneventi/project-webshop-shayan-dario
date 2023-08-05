@@ -2,7 +2,7 @@
 
 Beneventi Dario & Shayan Golabi - 2TI Odisee
  
-This project is a functional website that we created through approximately 80 hours of work, which amounts to a total of approximately 160 hours as it was developed using pair programming.
+This project is a functional website and that we created through approximately 80 hours of work, which amounts to a total of approximately 160 hours as it was developed using pair programming. Frontend languages HTML/CSS & Javascript | Backend language C#
 
 Features for Customers:
 	
