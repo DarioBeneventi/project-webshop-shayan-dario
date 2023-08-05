@@ -1,0 +1,106 @@
+﻿@inject SignInManager<WebsiteUser> signInManager;
+@inject UserManager<WebsiteUser> userManager;
+@inject ICustomerService customerService
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Index";
+    var customerId = -1;
+    List<LikedItem> likedItemsOfCustomer = null;
+    if (signInManager.IsSignedIn(User))
+    {
+        customerId = userManager.GetUserAsync(User).Result.CustomerId;
+        likedItemsOfCustomer = customerService.GetAllLikedItemsByCustomer(customerId).ToList();
+    }
+}
+
+@if (Model.Any())
+{
+    <select class="selectpicker mt-md-3" id="myInput">
+        <option selected disabled>Kies een categorie</option>
+        <option value="All">All</option>
+        <option value="Shirts">Shirts</option>
+        <option value="Jackets">Jackets</option>
+        <option value="Pants">Pants</option>
+        <option value="Hoodies">Hoodies</option>
+    </select>
+
+    <div class="card-deck">
+        @foreach (Product product in Model)
+        {
+            var photoPath = $"~/images/{product.PhotoPath ?? "noimage.png"}";
+            <div class="card text-center m-3" style="min-width: 18rem; max-width: 30.5%;">
+                <div class="imageContainer">
+                    <a asp-action="DetailsProduct" asp-controller="Home" asp-route-id="@product.ProductId"><img class="card-img-top imageThumbnail m-3" src="@photoPath" asp-append-version="true" /></a>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Customer"))
+                    {
+                        var existsOrNot = customerService.LikedItemExistsOrNot(likedItemsOfCustomer, customerId, product.ProductId);
+
+                        if (!existsOrNot)
+                        {
+                            <form class="top-right" asp-action="AddLikedItem" asp-controller="Home" asp-route-productId="@product.ProductId" method="post">
+                                <button class="btn btn-primary"><i class="fas fa-heart"></i></button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form class="top-right" asp-action="DeleteLikedItem" asp-controller="Home" asp-route-productId="@product.ProductId" method="post">
+                                <button class="btn btn-primary"><i class="fas fa-heart" style="color:red;"></i></button>
+                            </form>
+                        }
+                    }
+                </div>
+                <div class="card-header">
+                    <h4 class="card-title mt-2"><a asp-action="DetailsProduct" asp-controller="Home" asp-route-id="@product.ProductId">@product.Name</a></h4>
+                    <h5>@product.Category</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@product.Description</p>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col">
+                            <p>@product.Brand</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-muted pt-1">@product.Price€</p>
+                        </div>
+                    </div>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("SiteManager"))
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <a class="btn btn-warning" asp-action="EditProduct" asp-controller="SiteManager" asp-route-id="@product.ProductId">Edit</a>
+                            </div>
+                            <div class="col">
+                                <a class="btn btn-danger" asp-action="DeleteProduct" asp-controller="SiteManager" asp-route-id="@product.ProductId">Delete</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2 class="mt-4"><strong>There are no products available at the moment. Please come back, when we restock products!</strong></h2>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("change", function () {
+                var value = $(this).val().toLowerCase();
+                if (value != "all") {
+                    $(".card-header h5").filter(function () {
+                        $(this.parentNode.parentNode).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                } else {
+                    $(".card-header h5").filter(function () {
+                        $(this.parentNode.parentNode).toggle(true);
+                    });
+                }
+            });
+        });</script>
+}

@@ -1,0 +1,80 @@
+﻿@inject IAddressService addressService
+@inject UserManager<WebsiteUser> userManager;
+@model CustomerViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    var deliveryAddressExistsOrNot = addressService.DeliveryAddressExistsOrNot(userManager.GetUserAsync(User).Result.CustomerId);
+    var billingAddressExistsOrNot = addressService.BillingAddressExistsOrNot(userManager.GetUserAsync(User).Result.CustomerId);
+    var deliveryAddress = addressService.GetDeliveryAddressByCustomer(userManager.GetUserAsync(User).Result.CustomerId);
+    var billingAddress = addressService.GetBillingAddressByCustomer(userManager.GetUserAsync(User).Result.CustomerId);
+}
+
+<h1 class="mt-4">Profile</h1>
+
+<div>
+    <h4 class="mt-4">Your information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayName("Delivery Address")
+        </dt>
+        @if (!deliveryAddressExistsOrNot)
+        {
+            <dd class="col-sm-10">
+                <a class="btn btn-primary m-1" asp-action="CreateDeliveryAddress" asp-controller="Home"><i class="fa fa-plus"></i></a>
+            </dd>
+        }
+        else if (deliveryAddressExistsOrNot)
+        {
+            <dd class="col-sm-10">
+                <div class="d-inline-flex">
+                    <p class="mr-3">@deliveryAddress.Street @deliveryAddress.City @deliveryAddress.ZipCode @deliveryAddress.Country</p>
+                    <a class="btn btn-warning m-1" asp-action="EditDeliveryAddress" asp-controller="Home"><i class="fa fa-edit"></i></a>
+                    <form asp-action="DeleteDeliveryAddress" asp-controller="Home" method="post">
+                        <button class="btn btn-danger m-1" type="submit"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayName("Billing Address")
+        </dt>
+        @if (!billingAddressExistsOrNot)
+        {
+            <dd class="col-sm-10">
+                <a class="btn btn-primary m-1" asp-action="CreateBillingAddress" asp-controller="Home"><i class="fa fa-plus"></i></a>
+            </dd>
+        }
+        else if (billingAddressExistsOrNot)
+        {
+            <dd class="col-sm-10">
+                <div class="d-inline-flex">
+                    <p class="mr-3">@billingAddress.Street @billingAddress.City @billingAddress.ZipCode @billingAddress.Country</p>
+                    <a class="btn btn-warning m-1" asp-action="EditBillingAddress" asp-controller="Home"><i class="fa fa-edit"></i></a>
+                    <form asp-action="DeleteBilingAddress" asp-controller="Home" method="post">
+                        <button class="btn btn-danger m-1" type="submit"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+            </dd>
+        }
+    </dl>
+</div>

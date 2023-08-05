@@ -1,0 +1,13 @@
+﻿
+@if (ViewBag.ErrorTitle == null)
+{
+    <h3>
+        An error happened while handling your action, please go back to the Home page.
+    </h3>
+    <h5>Contact us on contact@webshop.com</h5>
+}
+else
+{
+    <h1 class="text-danger">@ViewBag.ErrorTitle</h1>
+    <h6 class="text-danger">@ViewBag.ErrorMessage</h6>
+}

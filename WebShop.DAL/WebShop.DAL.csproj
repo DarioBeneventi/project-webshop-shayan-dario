@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200512130508_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200512130508_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200602143827_ChangedUpdatedByAndDate.cs" />
+    <Compile Remove="Migrations\20200602143827_ChangedUpdatedByAndDate.Designer.cs" />
+    <Compile Remove="Migrations\20200602145312_WebsiteUser.cs" />
+    <Compile Remove="Migrations\20200602145312_WebsiteUser.Designer.cs" />
+    <Compile Remove="Migrations\20200602145521_WebsiteUser.cs" />
+    <Compile Remove="Migrations\20200602145521_WebsiteUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebShop.BOL\WebShop.BOL.csproj" />
+  </ItemGroup>
+
+</Project>

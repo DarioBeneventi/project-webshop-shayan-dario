@@ -1,0 +1,36 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Edit Order";
+}
+
+<h1 class="mt-4">Edit Order @Model.OrderId</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="OrderId" />
+            <input hidden asp-for="ProductId" />
+            <input hidden asp-for="CustomerId" />
+            <input hidden asp-for="CreatedDate" />
+            <input hidden asp-for="AmountPaid" />
+
+            <div class="form-group">
+                <label asp-for="OrderStatus" class="control-label"></label>
+                <select asp-for="OrderStatus" asp-items="Html.GetEnumSelectList<OrderStatus>()" class="selectpicker mr-sm-2">
+                    <option value="">Please Select</option>
+                </select>
+                <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Change order status" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="ListOrders" asp-controller="SiteManager">Back to orders</a>
+</div>
+

@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "List Orders";
+}
+
+<h1 class="mt-4">List of Orders</h1>
+
+@if (Model.Any())
+{
+    <select id="myInput" class="selectpicker mt-md-3">
+        <option selected disabled>Kies een status</option>
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Processing">Processing</option>
+        <option value="Sent">Sent</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Canceled">Canceled</option>
+    </select>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountPaid)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AmountPaid)
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" asp-action="EditOrder" asp-controller="SiteManager" asp-route-id="@item.OrderId">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No order was placed on your website.</h1>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("change", function () {
+                var value = $(this).val().toLowerCase();
+                if (value != "all") {
+                    $("table tr td:nth-child(2)").filter(function () {
+                        $(this.parentNode).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                } else {
+                    $("table tr td:nth-child(2)").filter(function () {
+                        $(this.parentNode).toggle(true);
+                    });
+                }
+            });
+        });</script>
+}

@@ -1,0 +1,138 @@
+﻿@inject SignInManager<WebsiteUser> signInManager;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <environment include="Development">
+        <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+              crossorigin="anonymous"
+              asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute"
+              asp-suppress-fallback-integrity="true">
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("Style", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
+        <a asp-action="Index" asp-controller="Home" class="navbar-brand">
+            <img src="~/images/webshop.png" height="30" width="30" asp-append-version="false" />
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">Products</a>
+                </li>
+                @if (signInManager.IsSignedIn(User) && User.IsInRole("SiteManager"))
+                {
+                    <li class="nav-item">
+                        <a asp-action="CreateProduct" asp-controller="SiteManager" class="nav-link">Create Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="ListCustomers" asp-controller="SiteManager" class="nav-link">List Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="ListOrders" asp-controller="SiteManager" class="nav-link">List Orders</a>
+                    </li>
+                }
+            </ul>
+            <form class="form-inline ml-3" asp-action="Index" asp-controller="Home" method="get">
+                    <input class="form-control" type="text" placeholder="Zoek Product" aria-label="Zoek" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <button type="submit" value="Search" class="btn btn-outline-primary ml-sm-2">Search</button>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                @if (signInManager.IsSignedIn(User))
+                {
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <li class="nav-item">
+                            <a asp-action="ListLikedItems" asp-controller="Home" class="nav-link">My Liked Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="ShoppingCart" asp-controller="Home" class="nav-link">Shopping Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Profile" asp-controller="Home" class="nav-link">User Profile</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Reviewer"))
+                    {
+                        <li class="nav-item">
+                            <a asp-action="ListReviews" asp-controller="Home" class="nav-link">My Reviews</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <form method="post" asp-action="Logout" asp-controller="Account">
+                            <button type="submit" class="nav-link btn btn-link" style="width:auto;">
+                                Logout @User.Identity.Name
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-action="Register" asp-controller="Account" class="nav-link">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Account" class="nav-link">Login</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        @RenderBody()
+        <hr />
+        <footer class="text-center">
+            <p>&copy; 2020 - WebShop Project - Shayan Golabi &amp; Dario Beneventi</p>
+        </footer>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+        <script src="~/js/CustomScript.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.4.1.min.js"
+                asp-fallback-src="~/lib/jquery/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                asp-suppress-fallback-integrity="true"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"
+                asp-suppress-fallback-integrity="true"
+                asp-fallback-test="window.jQuery">
+        </script>
+
+        <script src="~/js/CustomScript.js"></script>
+    </environment>
+    @RenderSection("Scripts", false)
+</body>
+</html>

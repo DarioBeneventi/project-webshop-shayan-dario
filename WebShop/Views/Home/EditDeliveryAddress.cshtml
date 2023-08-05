@@ -1,0 +1,50 @@
+﻿@model EditDeliveryAddressViewModel
+
+@{
+    ViewData["Title"] = "Edit Delivery Address";
+}
+
+<h1>Edit your delivery address</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditDeliveryAddress">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="DeliveryAddressId" />
+            <input hidden asp-for="CustomerId" />
+            <input hidden asp-for="CreatedDate" />
+            <div class="form-group">
+                <label asp-for="NameOfDeliveryAddress" class="control-label"></label>
+                <input asp-for="NameOfDeliveryAddress" class="form-control" />
+                <span asp-validation-for="NameOfDeliveryAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ZipCode" class="control-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Change delivery address" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Profile" asp-controller="Home">Back to profile</a>
+</div>

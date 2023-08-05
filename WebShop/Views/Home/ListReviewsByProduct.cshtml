@@ -1,0 +1,58 @@
+﻿@inject IProductService productService;
+@model IEnumerable<Review>
+
+@{
+    ViewData["Title"] = "List Reviews By Product";
+    var productId = Model.FirstOrDefault();
+    var product = productService.GetProductById(productId.ProductId);
+    var photoPathReview = $"~/images/{product.PhotoPath ?? "noimage.png"}";
+}
+
+
+
+@if (Model.Any())
+{
+    <div class="container mt-4 text-center">
+            <h1 class="mt-4">Reviews of Product @product.Name</h1>
+            <a asp-action="DetailsProduct" asp-controller="Home" asp-route-id="@product.ProductId"><img class="imgRecommendation mt-4" src="@photoPathReview" asp-append-version="true" /></a>
+            <h5 class="mt-3">Product Brand: @product.Brand</h5>
+    </div>
+    <hr />
+
+    <div class="container row mt-4">
+
+            @foreach (Review review in Model)
+            {
+                if (review != null)
+                {
+                <div class="card m-3" style="width:12rem;">
+                    <div class="card-body text-center">
+                        <h6>Title: @review.TitleReview</h6>
+                        <h6>Rating: </h6>
+                        <div class="d-inline-flex">
+                            @if (review.Rating > 0)
+                            {
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <i class="fa fa-star"></i>
+                                }
+
+                            }
+                            else
+                            {
+                                <p>0 Stars</p>
+                            }
+                        </div>
+                        <h6>Date Created: @review.CreatedDate</h6>
+                        <p>Review: @review.ReviewText</p>
+                    </div>
+                </div>
+                }
+            }
+    </div>
+    
+}
+else
+{
+    <h2 class="mt-3">There are no Reviews for this product at the moment !</h2>
+}

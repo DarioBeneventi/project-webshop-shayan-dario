@@ -1,0 +1,110 @@
+﻿@inject IProductService productService;
+@inject SignInManager<WebsiteUser> signInManager;
+@model ProductDetailViewModel
+
+@{
+    ViewBag.Title = "Product Detail";
+    var product = Model.Product;
+    var photoPath = $"~/images/{product.PhotoPath ?? "noimage.png"}";
+    var reviewsProduct = productService.GetAllReviewsByProduct(product.ProductId);
+}
+
+<div class="row justify-content-center m-3">
+    <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
+        <div class="product-content product-wrap clearfix product-deatil">
+            <div class="row">
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                    <div class="product-image">
+                        <div class="item active">
+                            <img class="card-img-top imgDetailProduct" src="@photoPath" asp-append-version="true" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 col-sm-12 col-xs-12">
+                    <h1 class="mt-2">@product.Name</h1>
+                    <h2 class="mt-2">@product.Brand</h2>
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        @if (User.IsInRole("Reviewer"))
+                        {
+                            <a asp-action="CreateReview" asp-controller="Home" asp-route-id="@product.ProductId" style="width:auto;" class="btn btn-primary">
+                                Leave a review
+                            </a>
+                        }
+                    }
+
+                    <hr />
+                    @if (@reviewsProduct.Count() > 0)
+                    {
+                        <a asp-action="ListReviewsByProduct" asp-controller="Home" asp-route-id="@product.ProductId">
+                            @reviewsProduct.Count().ToString() customer reviews
+                        </a>
+                    }
+                    else
+                    {
+                        <p>There are no reviews on this product at the moment.</p>
+                    }
+
+                    <hr />
+                    <h3 class="price-container">
+                        @product.Price€
+                        <small>*includes tax</small>
+                    </h3>
+                    <div class="certified">
+                        <ul>
+                            <li>
+                                <a href="https://www.bpost.be/site/nl/verzenden/pakjes-verzenden">Delivery time 5 Working Days</a>
+                            </li>
+                            <li>
+                                <p>Certified Years of experience</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="description description-tabs">
+                        <div id="myTabContent" class="tab-content">
+
+                            <strong>Description</strong>
+                            <p>
+                                @product.Description
+                            </p>
+                            <strong>Category</strong>
+                            <p>
+                                @product.Category
+                            </p>
+                            <form asp-action="CreateShoppingCartItem" asp-controller="Home" asp-route-id="@product.ProductId" asp-route-size="@Model.Size" method="post">
+                                <select asp-for="Size" asp-items="Html.GetEnumSelectList<Size>()" class="selectpicker mr-sm-2"></select>
+                                <span asp-validation-for="Size" class="text-danger"></span>
+                                <button class="btn btn-success btn-lg">Add to cart (@product.Price€)</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h4 class="mt-4">Recommended Items</h4>
+        <div class="card-group justify-content-start mt-2">
+            @{ var recommandations = @productService.GetAllProductsByCategory(product.Category.ToString());
+                int i = 0;
+                foreach (var recommendedProduct in recommandations)
+                {
+                    if (recommendedProduct.ProductId != product.ProductId)
+                    {
+                        i++;
+                        var photoPathRecommended = $"~/images/{recommendedProduct.PhotoPath ?? "noimage.png"}";
+                        if (i < 7)
+                        {
+                            <div class="row">
+                                <div class="card-body">
+                                    <a asp-action="DetailsProduct" asp-controller="Home" asp-route-id="@recommendedProduct.ProductId"><img class="imgRecommendation" src="@photoPathRecommended" asp-append-version="true" /></a>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
