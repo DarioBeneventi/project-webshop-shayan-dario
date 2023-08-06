@@ -5,7 +5,7 @@ Beneventi Dario & Shayan Golabi - 2TI Odisee
 This project is a functional website that we created through approximately 80 hours of work, which amounts to a total of approximately 160 hours as it was developed using pair programming. 
 Frontend languages HTML/CSS & Javascript | Backend language C#
 
-To Launch this application you will need to use the command Update-Database in the Package Manager Console (selecting the Webshop.DAL layer!)
+To Launch this application you will need to use the command Update-Database in the Package Manager Console, selecting the Webshop.DAL layer! in Visual Studio
 
 Features for Customers:
 	
