@@ -30,10 +30,6 @@ Features for the Reviewer:
 	Leave a review on a product	
 	See all my reviews
 
-There might be features that we forgot to mention so we invite the reader to try out our website !
-
-Thank you for reading.
-
 Customer Login:
 
 	Customer@test.com
@@ -48,3 +44,7 @@ Reviewer Login:
 
 	reviewer@test.com
 	Test12345$
+
+ There might be features that we forgot to mention so we invite the reader to try out our website !
+
+ Thank you for reading.
